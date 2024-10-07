@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolver Ecuaciones Lineales con 3 Incógnitas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #282c34;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #1c1e24;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            max-width: 550px;
+            width: 100%;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        label {
+            font-size: 0.95rem;
+            color: #b8b8b8;
+        }
+        input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 1px solid #666;
+            border-radius: 6px;
+            background-color: #333;
+            color: #fff;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #666;
+            border-radius: 6px;
+            background-color: #444;
+            color: #fff;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .result span {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .step-by-step {
+            background-color: #2d2f33;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .step-by-step p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Resolver Ecuaciones Lineales</h2>
+
+    <label>Selecciona la fuente:</label>
+    <select id="fontSelect" onchange="cambiarFuente()">
+        <option value="Arial">Arial</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Verdana">Verdana</option>
+    </select>
+
+    <div>
+        <label>Ecuación 1: a1x + b1y + c1z = d1</label>
+        <input type="number" id="a1" placeholder="a1">
+        <input type="number" id="b1" placeholder="b1">
+        <input type="number" id="c1" placeholder="c1">
+        <input type="number" id="d1" placeholder="d1">
+    </div>
+    <div>
+        <label>Ecuación 2: a2x + b2y + c2z = d2</label>
+        <input type="number" id="a2" placeholder="a2">
+        <input type="number" id="b2" placeholder="b2">
+        <input type="number" id="c2" placeholder="c2">
+        <input type="number" id="d2" placeholder="d2">
+    </div>
+    <div>
+        <label>Ecuación 3: a3x + b3y + c3z = d3</label>
+        <input type="number" id="a3" placeholder="a3">
+        <input type="number" id="b3" placeholder="b3">
+        <input type="number" id="c3" placeholder="c3">
+        <input type="number" id="d3" placeholder="d3">
+    </div>
+    
+    <button onclick="resolverSistema()">Resolver</button>
+
+    <div class="result" id="resultado"></div>
+</div>
+
+<footer>
+    Hecho por <strong>Gustavo Adolfo Sica Argueta</strong>
+</footer>
+
+<script>
+    function cambiarFuente() {
+        const selectedFont = document.getElementById('fontSelect').value;
+        document.body.style.fontFamily = selectedFont;
+    }
+
+    function determinante3x3(a1, b1, c1, a2, b2, c2, a3, b3, c3) {
+        return (
+            a1 * (b2 * c3 - b3 * c2) -
+            b1 * (a2 * c3 - a3 * c2) +
+            c1 * (a2 * b3 - a3 * b2)
+        );
+    }
+
+    function resolverSistema() {
+        let a1 = parseFloat(document.getElementById('a1').value);
+        let b1 = parseFloat(document.getElementById('b1').value);
+        let c1 = parseFloat(document.getElementById('c1').value);
+        let d1 = parseFloat(document.getElementById('d1').value);
+
+        let a2 = parseFloat(document.getElementById('a2').value);
+        let b2 = parseFloat(document.getElementById('b2').value);
+        let c2 = parseFloat(document.getElementById('c2').value);
+        let d2 = parseFloat(document.getElementById('d2').value);
+
+        let a3 = parseFloat(document.getElementById('a3').value);
+        let b3 = parseFloat(document.getElementById('b3').value);
+        let c3 = parseFloat(document.getElementById('c3').value);
+        let d3 = parseFloat(document.getElementById('d3').value);
+
+        let D = determinante3x3(a1, b1, c1, a2, b2, c2, a3, b3, c3);
+
+        let Dx = determinante3x3(d1, b1, c1, d2, b2, c2, d3, b3, c3);
+        let Dy = determinante3x3(a1, d1, c1, a2, d2, c2, a3, d3, c3);
+        let Dz = determinante3x3(a1, b1, d1, a2, b2, d2, a3, b3, d3);
+
+        let procedimiento = '';
+
+        if (D !== 0) {
+            let x = Dx / D;
+            let y = Dy / D;
+            let z = Dz / D;
+
+            procedimiento += '<div class="step-by-step">';
+            procedimiento += `<p><strong>Paso 1:</strong> Calculamos el determinante del sistema:</p>`;
+            procedimiento += `<p>D = ${D}</p>`;
+            procedimiento += `<p><strong>Paso 2:</strong> Determinante para x: Dx = ${Dx}</p>`;
+            procedimiento += `<p><strong>Paso 3:</strong> Determinante para y: Dy = ${Dy}</p>`;
+            procedimiento += `<p><strong>Paso 4:</strong> Determinante para z: Dz = ${Dz}</p>`;
+            procedimiento += `<p><strong>Paso 5:</strong> Soluciones:</p>`;
+            procedimiento += `<p>x = ${x.toFixed(2)}</p>`;
+            procedimiento += `<p>y = ${y.toFixed(2)}</p>`;
+            procedimiento += `<p>z = ${z.toFixed(2)}</p>`;
+            procedimiento += '</div>';
+
+            document.getElementById('resultado').innerHTML = `
+                <span>Resultado:</span>
+                <p>x = ${x.toFixed(2)}</p>
+                <p>y = ${y.toFixed(2)}</p>
+                <p>z = ${z.toFixed(2)}</p>
+                ${procedimiento}
+            `;
+        } else {
+            document.getElementById('resultado').innerHTML = `
+                <span>El sistema no tiene solución única porque el determinante es 0.</span>
+            `;
+        }
+    }
+</script>
+
+</body>
+</html>
